@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(): \Illuminate\Http\JsonResponse
     {
-        $data = Product::all();
+        $data = Product::with('productCategory')->get();
         return response()->json($data);
     }
 
@@ -22,7 +23,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         Product::create($request->all());
-        return response()->json(['message' => 'Added successfully']);
+        return response()->json('Added successfully');
     }
 
     /**
@@ -39,7 +40,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product): \Illuminate\Http\JsonResponse
     {
         $product->update($request->all());
-        return response()->json(['message' => 'Updated successfully']);
+        return response()->json('Updated successfully');
     }
 
     /**
@@ -48,6 +49,13 @@ class ProductController extends Controller
     public function destroy(Product $product): \Illuminate\Http\JsonResponse
     {
         $product->delete();
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json('Deleted successfully');
+    }
+
+    public function getProductCategories(): \Illuminate\Http\JsonResponse
+    {
+        $categories = ProductCategory::all();
+
+        return response()->json($categories);
     }
 }

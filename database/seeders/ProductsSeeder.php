@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
-class ProductCategorySeeder extends Seeder
+class ProductsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,8 +17,14 @@ class ProductCategorySeeder extends Seeder
         $numberOfItems = 5;
 
         for ($i = 0; $i < $numberOfItems; $i++) {
-            ProductCategory::create([
+            $category = ProductCategory::create([
                 'name' => fake()->firstName()
+            ]);
+
+            Product::create([
+                'name' => Str::random(10),
+                'quantity' => fake()->numberBetween(1, 100),
+                'product_category_id' => $category->id
             ]);
         }
     }
